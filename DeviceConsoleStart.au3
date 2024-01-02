@@ -101,9 +101,56 @@ MouseMove(258, 579)
 MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
 Sleep(100)
 MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
- 
+
+
+;UZSManager
+
+$pid = ProcessExists('UZSManager.exe')
+while($pid <> 0)
+
+		ProcessClose($pid)
+		sleep(1000)
+		$pid = ProcessExists('UZSManager.exe')
+WEnd
+
+ShellExecute("UZSManager.lnk",@ScriptDir)
+WinWaitActive("Пульт управления УУЗС", "", 5)
+
+ ;Команды управления
+ MouseMove(1914, 540)
+ MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
+Sleep(100)
+MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
+
+;Отркыть
+WinWaitActive("Открыть", "", 5)
+;Прокрутка вниз
+MouseClick("left", 412, 176)
+sleep(300)
+MouseClick("left", 412, 176)
+sleep(300)
+MouseClick("left", 412, 176)
+
+;Cписок расширенных команд
+MouseClick("left", 151, 172)
+sleep(400)
+MouseClick("left", 375, 222)
+
+;выбрать коммнанду
+sleep(500)
+MouseClick("left",1893, 541)
+sleep(1000)
+;MouseMove("left",1862, 564)
+;sleep(1000)
+MouseClick("left",1862, 564)
  BlockInput(0)
  
+ ;set active выберите значение
+ MouseClick("left",1499, 581)
+ sleep(800)
+ MouseClick("left", 1499,581,2)
+ sleep(500)
+ Send("1")
  
  
 
