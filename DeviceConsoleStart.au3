@@ -124,6 +124,7 @@ WEnd
 
 ShellExecute("UZSManager_cod.lnk",@ScriptDir)
 WinWaitActive("Пульт управления УУЗС", "", 5)
+WinActivate("Пульт управления УУЗС")
 Exit
  ;Команды управления
  MouseMove(1914, 540)
