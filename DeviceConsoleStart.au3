@@ -5,7 +5,7 @@
 #include<MsgBoxConstants.au3>
 #include <AutoItConstants.au3>
 #RequireAdmin
-BlockInput(1)
+BlockInput(0)
 Opt("TrayIconDebug",1) 
 
 Opt("MouseCoordMode", 0) ;
@@ -30,19 +30,20 @@ sleep(100)
 BlockInput(0)
 
 
-ProcessWaitClose($iPID , 1000)
+ProcessWaitClose($iPID , 300)
 
 
 ;block mouse and keyboard
-BlockInput(1)
+BlockInput(0)
 
 
 ShellExecute("DeviceConsole.lnk",@ScriptDir)
-WinWaitActive("[CLASS:DeviceConsole]", "", 5)
+$winID = WinWaitActive("Настройки оповещения", "", 1)
 MouseClick("left", 18, 197)
 
-WinWaitActive("[CLASS:DeviceConsole]","Определение польязователя", 5)
+WinWaitActive("Настройки оповещения","Определение польязователя", 5)
 MouseClick("left", 103, 147)
+
 
 ;click управляющие устройства
 MouseClick("left", 88, 250)
@@ -84,38 +85,46 @@ EndIf
    sleep(500)
 
 
+
 ; click Обновить 3 раза
-MouseMove(258, 579)
+MouseMove(328, 626, 20 )
 MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
 Sleep(100)
 MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
 Sleep(1000)
 
-MouseMove(258, 579)
+
 MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
 Sleep(100)
 MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
 Sleep(1000)
 
-MouseMove(258, 579)
+
 MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
 Sleep(100)
 MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
 
+;потянем вниз за прокрутку
+MouseMove(1082, 168,20)
+MouseDown($MOUSE_CLICK_LEFT)
+MouseMove(1085, 344, 50)
+MouseUp($MOUSE_CLICK_LEFT)
 
-;UZSManager
 
-$pid = ProcessExists('UZSManager.exe')
+
+;UZSManager_cod
+
+$pid = ProcessExists('UZSManager_cod.exe')
 while($pid <> 0)
 
 		ProcessClose($pid)
 		sleep(1000)
-		$pid = ProcessExists('UZSManager.exe')
+		$pid = ProcessExists('UZSManager_cod.exe')
 WEnd
 
-ShellExecute("UZSManager.lnk",@ScriptDir)
+ShellExecute("UZSManager_cod.lnk",@ScriptDir)
 WinWaitActive("Пульт управления УУЗС", "", 5)
-
+Exit
  ;Команды управления
  MouseMove(1914, 540)
  MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
