@@ -23,12 +23,31 @@ ShellExecute('clear_all.bat',@ScriptDir)
 sleep(400)
 
 ;run scrip uzs1
-Local $iPID = ShellExecute('uzs1',@ScriptDir)
-sleep(100)
+;Local $iPID = ShellExecute('uzs1',@ScriptDir, @SW_HIDE, BitOR($STDERR_CHILD, $STDOUT_CHILD)))
+Local $iPID = run('uzs1.bat', @ScriptDir,  @SW_MAXIMIZE , 0x1)
+
+Local $sOutput = ""
+        While 1
+                $sOutput &= StdoutRead($iPID)
+                If @error Then ; Exit the loop if the process closes or StdoutRead returns an error.
+                        ExitLoop
+                EndIf
+                MsgBox($MB_SYSTEMMODAL, "Stdout Read:", $sOutput)
+			WEnd
+	$sOutput = ''
+        While 1
+                $sOutput &= StderrRead($iPID)
+                If @error Then ; Exit the loop if the process closes or StderrRead returns an error.
+                        ExitLoop
+                EndIf
+                MsgBox($MB_SYSTEMMODAL, "Stderr Read:", $sOutput)
+        WEnd
+
+
+$data = StdOutRead($iPId)
 
 ;unblock mouse and keyboard
 BlockInput(0)
-
 
 ProcessWaitClose($iPID , 1000)
 
