@@ -1,6 +1,7 @@
-@echo off
-rem Setlocal EnableDelayedExpansion
-Set /P No=Serial number of UZS1:
-Set /p Co=Count of UZS1:
+echo off
+reg import DeviceConsole.reg
+reg import UZSManager.reg
+Set /a No = %1
+Set /a Co = %2
 sqlcmd -v serNo=%No% count=%Co% -i uzs1.sql
 
