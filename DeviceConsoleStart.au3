@@ -4,7 +4,7 @@
 
 #include <AutoItConstants.au3>
 #RequireAdmin
-BlockInput(0)
+BlockInput(1)
 Opt("TrayIconDebug",1) 
 
 Opt("MouseCoordMode", 0) ;
@@ -30,19 +30,19 @@ sleep(400)
 #include <MsgBoxConstants.au3>
 
 #Region ### START GUI section ### Form=
-Global $hGUI = GUICreate("Enter values", 326, 93)
-GUICtrlCreateLabel("Serial No: ", 8, 10, 60, 17)
-Global $SerNo = GUICtrlCreateInput("", 80, 8, 145, 21)
-GUICtrlCreateLabel("CountElem: ", 8, 35, 60, 17)
-Global $CountElem = GUICtrlCreateInput("", 80, 32, 145, 21)
-GUICtrlCreateLabel("Password: ", 8, 58, 56, 17)
-Global $iPassword = GUICtrlCreateInput("", 80, 56, 145, 21, BitOR($GUI_SS_DEFAULT_INPUT, $ES_PASSWORD))
-Global $bLogin = GUICtrlCreateButton("OK", 232, 30, 89, 49)
+Global $hGUI = GUICreate("Enter values", 170, 93)
+GUICtrlCreateLabel("Serial No: ", 12, 10, 60, 17)
+Global $SerNo = GUICtrlCreateInput("", 80, 5, 45, 21)
+;~ GUICtrlCreateLabel("CountElem: ", 8, 35, 60, 17)
+;~ Global $CountElem = GUICtrlCreateInput("", 80, 32, 145, 21)
+;~ GUICtrlCreateLabel("Password: ", 8, 58, 56, 17)
+;~ Global $iPassword = GUICtrlCreateInput("", 80, 56, 145, 21, BitOR($GUI_SS_DEFAULT_INPUT, $ES_PASSWORD))
+Global $bLogin = GUICtrlCreateButton("OK", 80, 35, 59, 40)
 GUISetState(@SW_SHOW)
 #EndRegion ### START GUI section ### Form=
 
 Global $uUname, $uPassword, $uCountElem
-
+BlockInput(0)
 While 1
     Switch GUIGetMsg()
         Case $GUI_EVENT_CLOSE
@@ -54,13 +54,16 @@ While 1
             EndIf
             GUISetState(@SW_SHOW)
         Case $bLogin
-			$uUnam = GUICtrlRead($SerNo)
-            $uCountElem = GUICtrlRead($CountElem)
-            $uPassword = GUICtrlRead($iPassword)
-            MsgBox($MB_ICONINFORMATION, "  Your values", "Uname: " & $uUnam & @CRLF & "Password: " & $uPassword& @CRLF & "Count: " & $uCountElem, 5)
+			$uSerNo = GUICtrlRead($SerNo)
+	  	   ;$uCountElem = GUICtrlRead($CountElem)
+		   ;$uPassword = GUICtrlRead($iPassword)
+           ;MsgBox($MB_ICONINFORMATION, "  Your values", "Uname: " & $uUnam & @CRLF & "Password: " & $uPassword& @CRLF & "Count: " & $uCountElem, 5)
+		   MsgBox($MB_ICONINFORMATION, "  Your values", "SerNo: " & $uSerNo, 5)
 		    ExitLoop
-    EndSwitch
-WEnd
+		EndSwitch
+		
+	WEnd
+BlockInput(1)
 
 
 
@@ -68,7 +71,8 @@ WEnd
 
 
 ;run script uzs1
-Local $iPID = ShellExecute('uzs1.bat', $uUnam &  "  " & $uCountElem ,@ScriptDir )
+;Local $iPID = ShellExecute('uzs1.bat', $uUnam &  "  " & $uCountElem ,@ScriptDir )
+Local $iPID = ShellExecute('uzs1.bat', $uSerNo& " " & 1 ,@ScriptDir )
 
 
 ProcessWaitClose($iPID , 300)
@@ -77,7 +81,11 @@ ProcessWaitClose($iPID , 300)
 
 ShellExecute("DeviceConsole.lnk",@ScriptDir)
 $winID = WinWaitActive("Настройки оповещения", "", 1)
-MouseClick("left", 18, 197)
+MouseMove(18, 197)
+sleep(800)
+MouseDown("left")
+sleep(500)
+MouseUp("left")
 
 
 WinWaitActive("Настройки оповещения","Определение польязователя", 5)
@@ -110,40 +118,71 @@ MouseClick("left",  459, 112, 2)
 ; EndIf
 #ce
 
-If WinWait("Внимание","",10) Then
+If WinWait("Внимание","",14) Then
 WinActivate("Внимание")
 WinWaitActive("Внимание")
-Send("{ENTER}")
+Sleep(1000)
+;Send("{ENTER}")
+MouseMove(221, 137,10)
+sleep(700)
+MouseDown("left")
+sleep(700)
+MouseUp("left")
 EndIf
 
 
-; click Тестирование УУЗС
-   MouseClick("left",  111, 232)
-   sleep(500)
+$winID = WinWaitActive("Настройки оповещения", "Локальный вход", 1)
 
+; click Тестирование УУЗС
+MouseMove(77, 233,20)
+   MouseDown("left")
+   sleep(600)
+   MouseUp("left")
+   sleep(800)
+   
 
 ; click Обновить 3 раза
-MouseMove(412, 711, 20 )
-MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
-Sleep(100)
-MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
-Sleep(1000)
 
+MouseMove(283, 546,10)
+MouseDown("left")
+sleep(400)
+MouseUp("left")
+sleep(1000)
+MouseDown("left")
+sleep(400)
+MouseUp("left")
+sleep(1000)
+MouseDown("left")
+sleep(400)
+MouseUp("left")
+sleep(1000)
 
-MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
-Sleep(100)
-MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
-Sleep(1000)
+#cs 
+; 
+; MouseMove(899, 163, 20 )
+; MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
+; Sleep(100)
+; MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
+; Sleep(1000)
+; 
+; 
+; MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
+; Sleep(100)
+; MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
+; Sleep(1000)
+; 
+; 
+; MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
+; Sleep(100)
+; MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
+#ce
 
-
-MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
-Sleep(100)
-MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
-
+;переведем курсор к началу прокрутки устройств
+MouseMove(898, 163, 20)
+sleep(600)
 ;потянем вниз за прокрутку
-MouseMove(1420, 165, 20)
 MouseDown($MOUSE_CLICK_LEFT)
-MouseMove(1420, 383, 50)
+MouseMove(902, 291,100)
 MouseUp($MOUSE_CLICK_LEFT)
 
 
@@ -157,7 +196,7 @@ while($pid <> 0)
 		sleep(1000)
 		$pid = ProcessExists('UZSManager_cod.exe')
 WEnd
-
+exit
 ShellExecute("UZSManager_cod.lnk",@ScriptDir)
 WinWaitActive("Пульт управления УУЗС", "", 5)
 WinActivate("Пульт управления УУЗС")
