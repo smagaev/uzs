@@ -32,7 +32,7 @@ sleep(400)
 #Region ### START GUI section ### Form=
 Global $hGUI = GUICreate("Enter values", 170, 93)
 GUICtrlCreateLabel("Serial No: ", 12, 10, 60, 17)
-Global $SerNo = GUICtrlCreateInput("", 80, 5, 45, 21)
+Global $SerNo = GUICtrlCreateInput("", 80, 7, 45, 21)
 ;~ GUICtrlCreateLabel("CountElem: ", 8, 35, 60, 17)
 ;~ Global $CountElem = GUICtrlCreateInput("", 80, 32, 145, 21)
 ;~ GUICtrlCreateLabel("Password: ", 8, 58, 56, 17)
@@ -182,7 +182,7 @@ MouseMove(898, 163, 20)
 sleep(600)
 ;потянем вниз за прокрутку
 MouseDown($MOUSE_CLICK_LEFT)
-MouseMove(902, 291,100)
+MouseMove(898, 270,100)
 MouseUp($MOUSE_CLICK_LEFT)
 
 
@@ -196,46 +196,85 @@ while($pid <> 0)
 		sleep(1000)
 		$pid = ProcessExists('UZSManager_cod.exe')
 WEnd
-exit
+
 ShellExecute("UZSManager_cod.lnk",@ScriptDir)
-WinWaitActive("Пульт управления УУЗС", "", 5)
+$hWnd=WinWaitActive("Пульт управления УУЗС", "", 5)
 WinActivate("Пульт управления УУЗС")
 
+#include <WinAPISys.au3>
+_WinAPI_SetKeyboardLayout($hWnd, 0x0419) ; ru
+Send(@CRLF & '0x0419 RUS'& @CR)
+Send("Real layout "& _WinAPI_GetKeyboardLayout($hWnd)& @CRLF)
+
  ;Команды управления
- MouseMove(1530, 604)
+ MouseMove(905, 367)
  MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
-Sleep(100)
+Sleep(500)
 MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
 
 ;Отркыть
 WinWaitActive("Открыть", "", 5)
+
 ;Прокрутка вниз
-MouseClick("left", 412, 176)
+MouseClick("left", 99, 219)
 sleep(300)
-MouseClick("left", 412, 176)
-sleep(300)
-MouseClick("left", 412, 176)
-
-;Cписок расширенных команд
-MouseClick("left", 151, 172)
-sleep(400)
-MouseClick("left", 375, 222)
-
-;выбрать коммнанду
-sleep(500)
-MouseClick("left",1893, 541)
+Send("спи")
 sleep(1000)
-;MouseMove("left",1862, 564)
-;sleep(1000)
-MouseClick("left",1862, 564)
- BlockInput(0)
- 
- ;set active выберите значение
- MouseClick("left",1499, 581)
+;Cписок расширенных команд
+
+;выбрать команду
+Send("{DOWN}")
+sleep(600)
+Send("{ENTER}")
+sleep(400)
+;set active выберите значение
+WinWaitActive("[class=CBuildCmdDockingWindow]", "", 10)
+ MouseMove(885, 367,20)
  sleep(800)
- MouseClick("left", 1499,581,2)
- sleep(500)
+ MouseDown("left")
+ sleep(400)
+ MouseUp("left")
+ MouseMove(835, 387,20)
+ MouseDown("left")
+ sleep(200)
+ MouseUp("left")
+ 
+ "Значение - serNO"
+ mouseMove(660, 404,20)
+ sleep(200)
+ MouseClick("Left")
+ sleep(600)
+ MouseClick("left",660, 404, 2)
+ Send($uSerNo)
+
+ sleep(400)
+MouseClick("left", 674, 419, 2)
+ sleep(400)
  Send("1")
+ 
+  sleep(400)
+MouseClick("left",665, 434, 2)
+ sleep(400)
+ Send("1")
+ 
+  sleep(400)
+MouseClick("left", 661, 447, 2)
+ sleep(400)
+ Send("1")
+ 
+  sleep(400)
+MouseClick("left", 659, 461, 2)
+ sleep(400)
+ Send("1")
+
+;выбрать управляющее устройство
+
+
+;click Добавить
+ sleep(400)
+ MouseClick("left", 659, 461)
+
+ 
  
  
 
