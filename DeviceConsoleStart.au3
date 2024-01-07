@@ -5,7 +5,7 @@
 #include <AutoItConstants.au3>
 #RequireAdmin
 BlockInput(1)
-Opt("TrayIconDebug",1) 
+Opt("TrayIconDebug",1)
 
 Opt("MouseCoordMode", 0) ;
 ;close running deviceconsole
@@ -61,7 +61,7 @@ While 1
 		   MsgBox($MB_ICONINFORMATION, "  Your values", "SerNo: " & $uSerNo, 5)
 		    ExitLoop
 		EndSwitch
-		
+
 	WEnd
 BlockInput(1)
 
@@ -101,7 +101,7 @@ sleep(500)
 ;double click on new controll element
 MouseClick("left",  459, 112, 2)
 
-;Настройки диспетчера управляющих устройств отличаются от .... 
+;Настройки диспетчера управляющих устройств отличаются от ....
 
 ;Opt("WinWaitDelay", 10)
 ;WinSetState(WinWait("[CLASS:MCIQTZ_Window]"), "", @SW_HIDE)
@@ -109,7 +109,7 @@ MouseClick("left",  459, 112, 2)
 #cs sleep(8000)
 ; $id = WinActive("Внимание")
 ; ;MsgBox($MB_OK, "title", $id)
-;  if $id Then 
+;  if $id Then
 ; 	  MouseMove(219, 135)
 ; 	  MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
 ; 	  Sleep(100)
@@ -139,7 +139,7 @@ MouseMove(77, 233,20)
    sleep(600)
    MouseUp("left")
    sleep(800)
-   
+
 
 ; click Обновить 3 раза
 
@@ -157,21 +157,21 @@ sleep(400)
 MouseUp("left")
 sleep(1000)
 
-#cs 
-; 
+#cs
+;
 ; MouseMove(899, 163, 20 )
 ; MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
 ; Sleep(100)
 ; MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
 ; Sleep(1000)
-; 
-; 
+;
+;
 ; MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
 ; Sleep(100)
 ; MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
 ; Sleep(1000)
-; 
-; 
+;
+;
 ; MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
 ; Sleep(100)
 ; MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
@@ -218,7 +218,7 @@ WinWaitActive("Открыть", "", 5)
 ;Прокрутка вниз
 MouseClick("left", 99, 219)
 sleep(300)
-Send("спи")
+Send("Cпи")
 sleep(1000)
 ;Cписок расширенных команд
 
@@ -238,7 +238,7 @@ WinWaitActive("[class=CBuildCmdDockingWindow]", "", 10)
  MouseDown("left")
  sleep(200)
  MouseUp("left")
- 
+
  "Значение - serNO"
  mouseMove(660, 404,20)
  sleep(200)
@@ -251,32 +251,33 @@ WinWaitActive("[class=CBuildCmdDockingWindow]", "", 10)
 MouseClick("left", 674, 419, 2)
  sleep(400)
  Send("1")
- 
+
   sleep(400)
 MouseClick("left",665, 434, 2)
  sleep(400)
  Send("1")
- 
+
   sleep(400)
 MouseClick("left", 661, 447, 2)
  sleep(400)
  Send("1")
- 
+
   sleep(400)
 MouseClick("left", 659, 461, 2)
  sleep(400)
  Send("1")
 
 ;выбрать управляющее устройство
-
+WinWaitActive("[ATL:004BD898]", "",1)
+WinGetText ( "title" [, "text" ] )
 
 ;click Добавить
  sleep(400)
  MouseClick("left", 659, 461)
 
- 
- 
- 
+
+
+
 
 
 
