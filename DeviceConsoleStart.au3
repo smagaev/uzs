@@ -55,16 +55,17 @@ While 1
             GUISetState(@SW_SHOW)
         Case $bLogin
 			$uSerNo = GUICtrlRead($SerNo)
-	  	   ;$uCountElem = GUICtrlRead($CountElem)
+		   ;$uCountElem = GUICtrlRead($CountElem)
 		   ;$uPassword = GUICtrlRead($iPassword)
            ;MsgBox($MB_ICONINFORMATION, "  Your values", "Uname: " & $uUnam & @CRLF & "Password: " & $uPassword& @CRLF & "Count: " & $uCountElem, 5)
-		   MsgBox($MB_ICONINFORMATION, "  Your values", "SerNo: " & $uSerNo, 5)
+		   ;MsgBox($MB_ICONINFORMATION, "  Your values", "SerNo: " & $uSerNo, 2)
 		    ExitLoop
 		EndSwitch
 
 	WEnd
 BlockInput(1)
 
+WinClose("Enter values")
 
 
 
@@ -80,7 +81,7 @@ ProcessWaitClose($iPID , 300)
 
 
 ShellExecute("DeviceConsole.lnk",@ScriptDir)
-$winID = WinWaitActive("Настройки оповещения", "", 1)
+$winID = WinWaitActive("Настройки оповещения")
 MouseMove(18, 197)
 sleep(800)
 MouseDown("left")
@@ -175,12 +176,12 @@ sleep(1000)
 #ce
 
 ;переведем курсор к началу прокрутки устройств
-MouseMove(898, 163, 20)
-sleep(600)
-;потянем вниз за прокрутку
-MouseDown($MOUSE_CLICK_LEFT)
-MouseMove(898, 270,100)
-MouseUp($MOUSE_CLICK_LEFT)
+;~ MouseMove(898, 163, 20)
+;~ sleep(600)
+;~ ;потянем вниз за прокрутку
+;~ MouseDown($MOUSE_CLICK_LEFT)
+;~ MouseMove(898, 270,100)
+;~ MouseUp($MOUSE_CLICK_LEFT)
 
 
 
@@ -270,13 +271,15 @@ MouseClick("left", 659, 461, 2)
  sleep(400)
  Send("1")
 
-;выбрать управляющее устройство
-WinWaitActive("[ATL:004BD898]", "",1)
-WinGetText ( "title" [, "text" ] )
+;выбрать управляющее устройство и запустить на выполнение
+MouseClick("left",81,183,1)
+MouseClick("left",782,552,1)
+MouseMove(362,120)
+MouseDown("left")
+MouseMove(361,120)
+MouseUp("left")
+MouseClick("left",58,74,1)
 
-;click Добавить
- sleep(400)
- MouseClick("left", 659, 461)
 
 
 
