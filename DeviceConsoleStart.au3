@@ -119,15 +119,12 @@ MouseClick("left",  459, 112, 2)
 #ce
 
 If WinWait("Внимание","",14) Then
-WinActivate("Внимание")
-WinWaitActive("Внимание")
-Sleep(1000)
+;~ WinActivate("Внимание")
+;~ WinWaitActive("Внимание")
+Sleep(500)
 ;Send("{ENTER}")
-MouseMove(221, 137,10)
-sleep(700)
-MouseDown("left")
-sleep(700)
-MouseUp("left")
+
+ControlClick("Внимание", "" ,"Button1" )
 EndIf
 
 
@@ -198,8 +195,8 @@ while($pid <> 0)
 WEnd
 
 ShellExecute("UZSManager_cod.lnk",@ScriptDir)
-$hWnd=WinWaitActive("Пульт управления УУЗС", "", 5)
-WinActivate("Пульт управления УУЗС")
+$hWnd=WinWaitActive("Пульт управления УУЗС")
+;WinActivate("Пульт управления УУЗС")
 
 #include <WinAPISys.au3>
 _WinAPI_SetKeyboardLayout($hWnd, 0x0419) ; ru
@@ -213,20 +210,26 @@ Sleep(500)
 MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
 
 ;Отркыть
-WinWaitActive("Открыть", "", 5)
-
+WinWaitActive("Открыть")
+sleep(800)
 ;Прокрутка вниз
-MouseClick("left", 99, 219)
-sleep(300)
-Send("Cпи")
+ControlFocus("Открыть","","Edit1")
 sleep(1000)
+ControlSetText("Открыть","","Edit1","Список расширенных команд управления.scs")
+sleep(1000)
+ControlClick("Открыть", "", "Button2")
+sleep(1000)
+;~ MouseClick("left", 99, 219)
+;~ sleep(300)
+;~ Send("Cпи")
+;~ sleep(1000)
 ;Cписок расширенных команд
 
 ;выбрать команду
-Send("{DOWN}")
-sleep(600)
-Send("{ENTER}")
-sleep(400)
+;~ Send("{DOWN}")
+;~ sleep(600)
+;~ Send("{ENTER}")
+;~ sleep(400)
 ;set active выберите значение
 WinWaitActive("[class=CBuildCmdDockingWindow]", "", 10)
  MouseMove(885, 367,20)
