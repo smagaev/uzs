@@ -90,8 +90,8 @@ MouseUp("left")
 
 
 WinWaitActive("Настройки оповещения","Определение польязователя", 5)
-MouseClick("left", 103, 147)
-
+ControlClick("Определение пользователя", "", "Button1")
+exit
 
 ;click управляющие устройства
 MouseClick("left", 88, 250)
