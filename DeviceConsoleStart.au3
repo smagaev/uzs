@@ -30,7 +30,7 @@ sleep(400)
 #include <MsgBoxConstants.au3>
 
 #Region ### START GUI section ### Form=
-Global $hGUI = GUICreate("Enter values", 170, 93)
+Global $hGUI = GUICreate("Введите серийный номер УЗС1", 170, 93)
 GUICtrlCreateLabel("Serial No: ", 12, 10, 60, 17)
 Global $SerNo = GUICtrlCreateInput("", 80, 7, 45, 21)
 ;~ GUICtrlCreateLabel("CountElem: ", 8, 35, 60, 17)
@@ -59,13 +59,13 @@ While 1
 		   ;$uPassword = GUICtrlRead($iPassword)
            ;MsgBox($MB_ICONINFORMATION, "  Your values", "Uname: " & $uUnam & @CRLF & "Password: " & $uPassword& @CRLF & "Count: " & $uCountElem, 5)
 		   ;MsgBox($MB_ICONINFORMATION, "  Your values", "SerNo: " & $uSerNo, 2)
+		   GUIDelete();
 		    ExitLoop
 		EndSwitch
 
 	WEnd
 BlockInput(1)
 
-WinClose("Enter values")
 
 
 
@@ -91,16 +91,19 @@ MouseUp("left")
 
 WinWaitActive("Настройки оповещения","Определение польязователя", 5)
 ControlClick("Определение пользователя", "", "Button1")
-exit
+
 
 ;click управляющие устройства
 MouseClick("left", 88, 250)
 
 ;one click on new controll element
-MouseClick("left",  459, 112)
+;~ MouseClick("left",  459, 112)
 sleep(500)
+ControlClick("Настройки оповещения","","CContrDeviceListView1")
+send("{Down}")
+sleep(600)
 ;double click on new controll element
-MouseClick("left",  459, 112, 2)
+send("{Enter}")
 
 ;Настройки диспетчера управляющих устройств отличаются от ....
 
@@ -132,28 +135,18 @@ EndIf
 $winID = WinWaitActive("Настройки оповещения", "Локальный вход", 1)
 
 ; click Тестирование УУЗС
-MouseMove(77, 233,20)
+MouseMove(77, 233)
    MouseDown("left")
-   sleep(600)
+   sleep(400)
    MouseUp("left")
-   sleep(800)
+   sleep(900)
 
 
-; click Обновить 3 раза
+; click Обновить
 
-MouseMove(283, 546,10)
-MouseDown("left")
-sleep(400)
-MouseUp("left")
-sleep(1000)
-MouseDown("left")
-sleep(400)
-MouseUp("left")
-sleep(1000)
-MouseDown("left")
-sleep(400)
-MouseUp("left")
-sleep(1000)
+MouseMove(283, 546)
+ControlClick("Настройки оповещения", "", "Button3")
+
 
 #cs
 ;
@@ -191,9 +184,9 @@ $pid = ProcessExists('UZSManager_cod.exe')
 while($pid <> 0)
 
 		ProcessClose($pid)
-		sleep(1000)
+		sleep(500)
 		$pid = ProcessExists('UZSManager_cod.exe')
-WEnd
+Wend
 
 ShellExecute("UZSManager_cod.lnk",@ScriptDir)
 $hWnd=WinWaitActive("Пульт управления УУЗС")
@@ -205,10 +198,7 @@ Send(@CRLF & '0x0419 RUS'& @CR)
 Send("Real layout "& _WinAPI_GetKeyboardLayout($hWnd)& @CRLF)
 
  ;Команды управления
- MouseMove(905, 367)
- MouseDown($MOUSE_CLICK_LEFT) ; Set the left mouse button state as down.
-Sleep(500)
-MouseUp($MOUSE_CLICK_LEFT) ; Set the left mouse button state as up.
+ControlClick("Пульт управления УУЗС", "", "Button1")
 
 ;Отркыть
 WinWaitActive("Открыть")
@@ -232,22 +222,26 @@ sleep(1000)
 ;~ Send("{ENTER}")
 ;~ sleep(400)
 ;set active выберите значение
-WinWaitActive("[class=CBuildCmdDockingWindow]", "", 10)
- MouseMove(885, 367,20)
- sleep(800)
- MouseDown("left")
- sleep(400)
- MouseUp("left")
- MouseMove(835, 387,20)
- MouseDown("left")
- sleep(200)
- MouseUp("left")
+;WinWaitActive("[class=CBuildCmdDockingWindow]")
 
- "Значение - serNO"
- mouseMove(660, 404,20)
+
+;~  MouseMove(885, 367,20)
+;~  sleep(800)
+;~  MouseDown("left")
+;~  sleep(400)
+;~  MouseUp("left")
+ ControlClick("Пульт управления УУЗС","", "ComboBox1")
+ Send("{Down}")
+ sleep(200)
+ Send("{Enter}")
+ sleep(500)
+WinActive("[class=CBuildCmdDockingWindow]")
+ ;"Значение - serNO"
+sleep(100)
+ mouseMove(660, 404)
  sleep(200)
  MouseClick("Left")
- sleep(600)
+ sleep(200)
  MouseClick("left",660, 404, 2)
  Send($uSerNo)
 
