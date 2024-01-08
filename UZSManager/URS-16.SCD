@@ -1,0 +1,16 @@
+\sКанал 1 \c0x21\01\p3;
+\sКанал 2 \c0x21\02\p3;
+\sКанал 3 \c0x21\03\p3;
+\sКанал 4 \c0x21\04\p3;
+\sКанал 5 \0x0005\offset4\hex;
+\sКанал 6 \0x0006\offset4\hex;
+\sКанал 7 \0x0007\offset4\hex;
+\sКанал 8 \0x0008\offset4\hex;
+\sКанал 9 \0x0009\offset4\hex;
+\sКанал 10 \0x000A\offset4\hex;
+\sКанал 11 \0x000B\offset4\hex;
+\sКанал 12 \0x000C\offset4\hex;
+\sКанал 13 \0x000D\offset4\hex;
+\sКанал 14 \0x000E\offset4\hex;
+\sКанал 15 \0x000F\offset4\hex;
+\sКанал 16 \0x0010\offset4\hex;
