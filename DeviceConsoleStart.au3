@@ -1,13 +1,17 @@
-;http://www.oszone.net/display.php?id=3663
-;If WinExists(@ScriptName) Then Exit
-;AutoItWinSetTitle(@ScriptName)
+;~ "Set resolution: 1920 x1080"
+;~ "Set user scale: 125%"
 
 #include <AutoItConstants.au3>
+#include <ButtonConstants.au3>
+#include <EditConstants.au3>
+#include <GUIConstantsEx.au3>
+#include <StaticConstants.au3>
+#include <WindowsConstants.au3>
+#include <MsgBoxConstants.au3>
 #RequireAdmin
-BlockInput(1)
 Opt("TrayIconDebug",1)
 
-Opt("MouseCoordMode", 0) ;
+Opt("MouseCoordMode", 0);
 ;close running deviceconsole
 $pid = ProcessExists('deviceconsole.exe')
 while($pid <> 0)
@@ -21,28 +25,15 @@ WEnd
 ShellExecute('clear_all.bat',@ScriptDir)
 sleep(400)
 
-
-#include <ButtonConstants.au3>
-#include <EditConstants.au3>
-#include <GUIConstantsEx.au3>
-#include <StaticConstants.au3>
-#include <WindowsConstants.au3>
-#include <MsgBoxConstants.au3>
-
 #Region ### START GUI section ### Form=
-Global $hGUI = GUICreate("Введите серийный номер УЗС1", 170, 93)
-GUICtrlCreateLabel("Serial No: ", 12, 10, 60, 17)
-Global $SerNo = GUICtrlCreateInput("", 80, 7, 45, 21)
-;~ GUICtrlCreateLabel("CountElem: ", 8, 35, 60, 17)
-;~ Global $CountElem = GUICtrlCreateInput("", 80, 32, 145, 21)
-;~ GUICtrlCreateLabel("Password: ", 8, 58, 56, 17)
-;~ Global $iPassword = GUICtrlCreateInput("", 80, 56, 145, 21, BitOR($GUI_SS_DEFAULT_INPUT, $ES_PASSWORD))
-Global $bLogin = GUICtrlCreateButton("OK", 80, 35, 59, 40)
+Global $hGUI = GUICreate("Введите серийный номер УЗС1", 190, 140)
+GUICtrlCreateLabel("Serial No: ", 32, 33, 60, 17)
+Global $SerNo = GUICtrlCreateInput("", 90, 28, 45, 21)
+Global $bLogin = GUICtrlCreateButton("OK", 80, 65, 59, 40)
 GUISetState(@SW_SHOW)
 #EndRegion ### START GUI section ### Form=
 
 Global $uUname, $uPassword, $uCountElem
-BlockInput(0)
 While 1
     Switch GUIGetMsg()
         Case $GUI_EVENT_CLOSE
@@ -55,11 +46,7 @@ While 1
             GUISetState(@SW_SHOW)
         Case $bLogin
 			$uSerNo = GUICtrlRead($SerNo)
-		   ;$uCountElem = GUICtrlRead($CountElem)
-		   ;$uPassword = GUICtrlRead($iPassword)
-           ;MsgBox($MB_ICONINFORMATION, "  Your values", "Uname: " & $uUnam & @CRLF & "Password: " & $uPassword& @CRLF & "Count: " & $uCountElem, 5)
-		   ;MsgBox($MB_ICONINFORMATION, "  Your values", "SerNo: " & $uSerNo, 2)
-		   GUIDelete();
+			GUIDelete();
 		    ExitLoop
 		EndSwitch
 
