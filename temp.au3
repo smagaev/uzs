@@ -1,47 +1,37 @@
-ShellExecute("UZSManager_cod.lnk",@ScriptDir)
-$hWnd=WinWaitActive("Пульт управления УУЗС")
-;WinActivate("Пульт управления УУЗС")
+#include <MsgBoxConstants.au3>
 
-#include <WinAPISys.au3>
-_WinAPI_SetKeyboardLayout($hWnd, 0x0419) ; ru
-Send(@CRLF & '0x0419 RUS'& @CR)
-Send("Real layout "& _WinAPI_GetKeyboardLayout($hWnd)& @CRLF)
+$phase1 = MsgBox($MB_OK,"Warning!", "Отключите фазу 1 нагрузки и нажмите ОК")
 
- ;Команды управления
-ControlClick("Пульт управления УУЗС", "", "Button1")
-
-;Отркыть
-WinWaitActive("Открыть")
-sleep(800)
-;Прокрутка вниз
-ControlFocus("Открыть","","Edit1")
-sleep(1000)
-ControlSetText("Открыть","","Edit1","Список расширенных команд управления.scs")
-sleep(1000)
-ControlClick("Открыть", "", "Button2")
-sleep(1000)
-
-MouseClick("left", 99, 219)
-sleep(300)
-Send("Cпи")
-sleep(500)
-;Cписок расширенных команд
-
-;выбрать команду
-Send("{DOWN}")
-sleep(600)
-Send("{ENTER}")
-sleep(400)
-;set active выберите значение
-WinWaitActive("[class=CBuildCmdDockingWindow]")
+if ($phase1) then
+   MsgBox($MB_OK, "Message", $phase1)
+   MouseMove(362,120)
+   MouseDown("left")
+   MouseMove(361,120)
+   MouseUp("left")
+   MouseClick("left",58,74,1)
+EndIf
 
 
-MouseMove(885, 367,20)
-sleep(800)
-MouseDown("left")
-sleep(400)
-MouseUp("left")
+$phase2 = MsgBox($MB_OKCANCEL,"Warning!", "Отключите фазу 2 нагрузки и нажмите ОК")
 
+if ($phase2) then
+   MouseMove(362,120)
+   MouseDown("left")
+   MouseMove(361,120)
+   MouseUp("left")
+   MouseClick("left",58,74,1)
+EndIf
+
+
+$phase3 = MsgBox($MB_OK,"Warning!", "Отключите фазу 2 нагрузки и нажмите ОК")
+
+if ($phase3) then
+   MouseMove(362,120)
+   MouseDown("left")
+   MouseMove(361,120)
+   MouseUp("left")
+   MouseClick("left",58,74,1)
+EndIf
 
 
 

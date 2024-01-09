@@ -260,6 +260,46 @@ MouseMove(361,120)
 MouseUp("left")
 MouseClick("left",58,74,1)
 
+;ждем столько сколько нужно! пока 10 сек (пока отстучит нужно засесь время)
+Exit
+sleep (10000)
+
+$phase1 = MsgBox($MB_OKCANCEL,"Warning!", "Отключите фазу 1 нагрузки и нажмите ОК")
+if ($phase1) then
+   MouseMove(362,120)
+   MouseDown("left")
+   MouseMove(361,120)
+   MouseUp("left")
+   MouseClick("left",58,74,1)
+EndIf
+
+sleep (4000)
+
+$phase2 = MsgBox($MB_OKCANCEL,"Warning!", "Отключите фазу 2, подключите фазу 1 нагрузки и нажмите ОК")
+
+if ($phase2) then
+   MouseMove(362,120)
+   MouseDown("left")
+   MouseMove(361,120)
+   MouseUp("left")
+   MouseClick("left",58,74,1)
+EndIf
+
+sleep (4000)
+
+$phase3 = MsgBox($MB_OK,"Warning!", "Отключите фазу 3, подключите фазу2 и нажмите ОК")
+
+if ($phase3) then
+   MouseMove(362,120)
+   MouseDown("left")
+   MouseMove(361,120)
+   MouseUp("left")
+   MouseClick("left",58,74,1)
+EndIf
+
+
+$ 3 = MsgBox($MB_OK,"Warning!", "Нажмите датчик открытия двери и нажмите ОК")
+
 
 
 
