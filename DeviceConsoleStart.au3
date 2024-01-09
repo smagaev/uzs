@@ -21,37 +21,34 @@ while($pid <> 0)
 		$pid = ProcessExists('deviceconsole.exe')
 WEnd
 
-;Run(@ScriptDir,"clear_all.bat")
-ShellExecute('clear_all.bat',@ScriptDir)
-sleep(400)
-
-#Region ### START GUI section ### Form=
-Global $hGUI = GUICreate("Введите серийный номер УЗС1", 190, 140)
-GUICtrlCreateLabel("Serial No: ", 32, 33, 60, 17)
-Global $SerNo = GUICtrlCreateInput("", 90, 28, 45, 21)
-Global $bLogin = GUICtrlCreateButton("OK", 80, 65, 59, 40)
-GUISetState(@SW_SHOW)
-#EndRegion ### START GUI section ### Form=
-
-Global $uUname, $uPassword, $uCountElem
-While 1
-    Switch GUIGetMsg()
-        Case $GUI_EVENT_CLOSE
-            GUISetState(@SW_HIDE)
-            Local $iAsk = MsgBox($MB_ICONWARNING + $MB_YESNO, "?", "You want to quit?")
-            If $iAsk = 1 Or $iAsk = 6 Then
-                MsgBox($MB_ICONWARNING, "Exit", "Operation has been cancelled" & @CRLF & "The Script will now quit.", 2)
-                Exit
-            EndIf
-            GUISetState(@SW_SHOW)
-        Case $bLogin
-			$uSerNo = GUICtrlRead($SerNo)
-			GUIDelete();
-		    ExitLoop
-		EndSwitch
-
-	WEnd
-BlockInput(1)
+ ;Run(@ScriptDir,"clear_all.bat")
+ ShellExecute('clear_all.bat',@ScriptDir)
+ sleep(400)
+ #Region ### START GUI section ### Form=
+ Global $hGUI = GUICreate("Введите серийный номер УЗС1", 190, 140)
+ GUICtrlCreateLabel("Serial No: ", 32, 33, 60, 17)
+ Global $SerNo = GUICtrlCreateInput("", 90, 28, 45, 21)
+ Global $bLogin = GUICtrlCreateButton("OK", 80, 65, 59, 40)
+ GUISetState(@SW_SHOW)
+ #EndRegion ### START GUI section ### Form=
+ Global $uUname, $uPassword, $uCountElem
+ While 1
+     Switch GUIGetMsg()
+         Case $GUI_EVENT_CLOSE
+             GUISetState(@SW_HIDE)
+             Local $iAsk = MsgBox($MB_ICONWARNING + $MB_YESNO, "?", "You want to quit?")
+             If $iAsk = 1 Or $iAsk = 6 Then
+                 MsgBox($MB_ICONWARNING, "Exit", "Operation has been cancelled" & @CRLF & "The Script will now quit.", 2)
+                 Exit
+             EndIf
+             GUISetState(@SW_SHOW)
+         Case $bLogin
+ 			$uSerNo = GUICtrlRead($SerNo)
+ 			GUIDelete();
+ 		    ExitLoop
+ 		EndSwitch
+ 	WEnd
+ BlockInput(0)
 
 
 
@@ -62,7 +59,6 @@ BlockInput(1)
 ;Local $iPID = ShellExecute('uzs1.bat', $uUnam &  "  " & $uCountElem ,@ScriptDir )
 Local $iPID = ShellExecute('uzs1.bat', $uSerNo& " " & 1 ,@ScriptDir )
 
-
 ProcessWaitClose($iPID , 300)
 
 
@@ -72,11 +68,12 @@ $winID = WinWaitActive("Настройки оповещения")
 MouseMove(18, 197)
 sleep(800)
 MouseDown("left")
+MouseDown("left")
 sleep(500)
 MouseUp("left")
 
 
-WinWaitActive("Настройки оповещения","Определение польязователя", 5)
+WinWaitActive("Определение пользователя")
 ControlClick("Определение пользователя", "", "Button1")
 
 
@@ -109,7 +106,7 @@ send("{Enter}")
 ; EndIf
 #ce
 
-If WinWait("Внимание","",14) Then
+If WinWait("Внимание","",30) Then
 ;~ WinActivate("Внимание")
 ;~ WinWaitActive("Внимание")
 Sleep(500)
@@ -217,11 +214,13 @@ sleep(1000)
 ;~  MouseDown("left")
 ;~  sleep(400)
 ;~  MouseUp("left")
- ControlClick("Пульт управления УУЗС","", "ComboBox1")
- Send("{Down}")
- sleep(200)
- Send("{Enter}")
- sleep(500)
+
+;select command "Запуск сеанса оповещения с числом повторов"
+
+MouseClick("left",881,371,1)
+Send("{DOWN}{DOWN}{ENTER}")
+
+
 WinActive("[class=CBuildCmdDockingWindow]")
  ;"Значение - serNO"
 sleep(100)

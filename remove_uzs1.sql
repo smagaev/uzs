@@ -6,6 +6,12 @@ delete
 delete 
   FROM [GSO].[dbo].[SZSSgsInfo]
 delete 
+  FROM [GSO].[dbo].[SessionItemTop]
+delete 
+  FROM [GSO].[dbo].[SessionItem] 
+delete 
+  FROM [GSO].[dbo].[SitItem] 
+delete 
   FROM [GSO].[dbo].[SZSDevice] where SZSDevID <> 0
 delete 
   FROM [GSO].[dbo].[LinesBinding]
