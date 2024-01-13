@@ -2,7 +2,8 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED
 
 Declare @i int 
 set @i = 0
-WHILE @i < $(Co)
+--WHILE @i < $(Co)
+WHILE @i < 1
 BEGIN
 declare @name varchar(40)
 declare @DeviceID int
@@ -17,6 +18,7 @@ Declare @SZDeviceName varchar(40)
 Declare @serNoSZDevice int
 
 Set @serNoSZDevice =  $(No)+@i;
+--Set @serNoSZDevice =  99999+@i;
 
 Set @SZDeviceName = 'Терминал - '  + CONVERT(varchar, @serNoSZDevice)
 set @name = 'Управление - '+ CONVERT(varchar, @serNoSZDevice)
@@ -55,7 +57,7 @@ VALUES(@serNoSZDevice, @StaffID,@SZDeviceName, 1, 1, 0, 0, 0, 0, 0, 1, '','')
 
 --6. Terminal device --
 
-INSERT INTO GSO.dbo.SZSShedule(SZSDevID,DevStaffID,DevClassID,BaseType,GlobalType,UserType,ConnParam,PriorType,CurrCall) VALUES(@serNoSZDevice,@StaffID,19,5,0,0,@DeviceID,1,0)
+INSERT INTO GSO.dbo.SZSShedule(SZSDevID,DevStaffID,DevClassID,BaseType,GlobalType,UserType,ConnParam,PriorType,CurrCall) VALUES(@serNoSZDevice,@StaffID,22,5,0,0,@DeviceID,1,0)
 
 --7. --
 INSERT INTO GSO.dbo.SZSSgsInfo(SZSDevID,StaffID,ZoneCount)
