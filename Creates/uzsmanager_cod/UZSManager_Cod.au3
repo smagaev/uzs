@@ -11,7 +11,8 @@
 #RequireAdmin
 Opt("TrayIconDebug",1)
 
-Opt("MouseCoordMode", 0);
+Opt("MouseCoordMode", 3);
+Opt("CaretCoordMode", 3);
 
 ;UZSManager_cod
 
@@ -25,7 +26,9 @@ Wend
 
 ShellExecute("UZSManager_cod.lnk",@ScriptDir)
 $hWnd=WinWaitActive("Пульт управления УУЗС")
-;WinActivate("Пульт управления УУЗС")
+
+;wait while all finished uzs apper
+sleep(2000)
 
 #include <WinAPISys.au3>
 _WinAPI_SetKeyboardLayout($hWnd, 0x0419) ; ru
@@ -48,22 +51,23 @@ sleep(1000)
 
 ;select command "Запуск сеанса оповещения с числом повторов"
 
-MouseClick("left",881,371,1)
+MouseClick("left",443, 326,1)
 Send("{DOWN}{DOWN}{ENTER}")
 
-
-WinActive("[class=CBuildCmdDockingWindow]")
+exit
+WinWaitActive("Пульт управления УУЗС", "SysListView321")
  ;"Значение - serNO"
 sleep(100)
- mouseMove(660, 404)
+ mouseMove(443, 347)
  sleep(200)
+
  MouseClick("Left")
  sleep(200)
- MouseClick("left",660, 404, 2)
+ MouseClick("left",443, 347, 2)
  Send($uSerNo)
 
  sleep(400)
-MouseClick("left", 674, 419, 2)
+MouseClick("left", 443, 347, 2)
  sleep(400)
  Send("1")
 
@@ -128,8 +132,7 @@ if ($phase3) then
    MouseClick("left",58,74,1)
 EndIf
 
-
-$ 3 = MsgBox($MB_OK,"Warning!", "Нажмите датчик открытия двери и нажмите ОК")
+3 = MsgBox($MB_OK,"Warning!", "Нажмите датчик открытия двери и нажмите ОК")
 
 
 
