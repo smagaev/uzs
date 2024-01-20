@@ -1,7 +1,7 @@
 ::[Bat To Exe Converter]
 ::
-::YAwzoRdxOk+EWAjk
-::fBw5plQjdCyDJEye534TOh5VWAGRAGK5CbsP1P3h/LjUoQMUV+1f
+::YAwzoRdxOk+EWAnk
+::fBw5plQjdG8=
 ::YAwzuBVtJxjWCl3EqQJgSA==
 ::ZR4luwNxJguZRRnk
 ::Yhs/ulQjdF+5
@@ -31,15 +31,15 @@
 ::
 ::
 ::978f952a14a936cc963da21a135fa983
-@Set /P No=Serial number of UZS2/3c:
-@certutil -decode u3.cert uzs23c.sql > null 
-@sqlcmd -v serNo=%No% -i uzs23c.sql 
-@del null
-@REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\SensorM\GSO\Ports /v "TCP192.168.1.1%No:~-2%" /t REG_DWORD /d 0x0002b210 
-@REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\SensorM\GSO\Ports\Params /v "TCP192.168.1.1%No:~-2%" /t REG_BINARY /d 000000008501a8c011270000000000000000 /f 
-@del uzs23c.sql 
-@echo "UZS2/3c created"
-@net stop SCSChLService
-@net start SCSChLService
-
+echo off
+set /A No = %1
+certutil -decode u3.cert uzs23c.sql > null 
+sqlcmd -v serNo=%1 count=1 -i uzs23c.sql 
+del null
+del uzs23c.sql 
+echo "UZS2/3c created"
+REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\SensorM\GSO\Ports /v "TCP192.168.1.1%No:~-2%" /t REG_DWORD /d 0x0002b210 
+REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\SensorM\GSO\Ports\Params /v "TCP192.168.1.1%No:~-2%" /t REG_BINARY /d 00000000%201a8c011270000000000000000 /f 
+net stop SCSChLService
+net start SCSChLService
 
