@@ -1,45 +1,68 @@
-#cs ----------------------------------------------------------------------------
-
- AutoIt Version: 3.3.14.0
- Author:         myName
-
- Script Function:
-	Template AutoIt script.
-
-#ce ----------------------------------------------------------------------------
-
-; Script Start - Add your code below here
-;https://blogadminday.ru/rabota-autoit-s-mssql/
-;https://www.autoitscript.com/forum/topic/203542-ms-sql-connection/
-
 #include <_sql.au3>
-#include <array.au3>
 
-Opt ("trayIconDebug",1)
-;register the error handler to prevent hard crash on COM error
-Msgbox(0,"","Старт скрипта и запуск обработчика ошибок")
-     _SQL_RegisterErrorHandler();register the error handler to prevent hard crash on COM error
+_SQL_RegisterErrorHandler()
 
-    $oADODB = _SQL_Startup()
-    If $oADODB = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+; Create ADODB.Connection object
+$oADODB = _SQL_Startup()
+If @error Then
+    MsgBox(0x10, 'Error', 'Failed to create ADODB.Connection object')
+    Exit
+EndIf
+
+; Create an array to store connection credentials (2 servers in my case)
+; This array can be obtained from an ini file like in your case
+; [Server, Database, Username, Password]
+Local $aServerInfo[1][4] = [['localhost', 'GSO', 'sa', 'l0017']]
+
+$Connect = Connect($oADODB, $aServerInfo, 2)
+If @error Or ($Connect = $SQL_ERROR) Then
+    MsgBox(0x10, 'Error', 'Could not estabilish a connection to any server.')
+Else
+    MsgBox(0x40, 'Yayyy', 'Connection estabilished with ' & $aServerInfo[@extended][0] & '.')
+ EndIf
+
+;~ 	declare @name varchar(40)
+;~ 	declare @DeviceID int
+;~ 	declare @serNo int
+;~ 	declare @ip int
+;~ 	declare @PortNo int
+;~ 	declare @DeviceName varchar(40)
+;~ 	declare @lineName varchar(20)
+;~ 	declare @phone int
+;~ 	Declare @SZDeviceID int
+;~ 	Declare @SZDeviceName varchar(40)
+;~ 	Declare @serNoSZDevice int
 
 
-    If _sql_Connect(-1,"localhost","","sa","Superartcore") = $SQL_ERROR then
-        Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
-        _SQL_Close()
-        Exit
-    EndIf
+    $serNoSZDevice =  55536;
 
-    If _SQL_Execute(-1,"Create database My_SQL_Test;") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
-    _SQL_Close()
+	const $ZDeviceName = "Terminal - "  & $serNoSZDevice
+	const $name = 'Управление - '  & $serNoSZDevice
+    const $ip = 1 & StringRight($serNoSZDevice,2)
+    const $phone = $ip
+	const $lineName = 'Линия - ' & $serNoSZDevice
+	const $serNo = -1062731520 + Int($ip)
+	const $PortNo = $serNo
+	const $DeviceName = 'COM' & $serNo & ' - HSCOM TCP XPORT'
+	;const $DeviceName = "83945322"
+MsgBox(0, "HI", $DeviceName)
+If _SQL_Execute(-1,"insert GSO.dbo.Device(SubsystemID, ComputerID, Status, AsoTypeConnect, AsoConnID, DeviceName, DeviceComm, SerNo, PortNo, OrderOnPort, ChannelsCount) values(2,0,1,NULL,NULL,"&$DeviceName&",'',NULL,"&$PortNo&",0,0);") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+	;set @DeviceID = @@IDENTITY
 
-	    $oADODB = _SQL_Startup()
+_SQL_Close($oADODB)
+_SQL_UnRegisterErrorHandler()
 
-    If _SQL_Connect(-1,"localhost","My_SQL_Test","sa","Superartcore") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
-    If _SQL_Execute(-1, "CREATE TABLE BBKS (ID INT NOT NULL IDENTITY(1,1),ComputerName VARCHAR(20) UNIQUE,Status VARCHAR(10),Error VARCHAR(10)Primary Key (ID));") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
-    If _SQL_Execute(-1,"INSERT INTO BBKS (ComputerName,Status,Error) VALUES ('"& @computername & "','On;li''ne','None');") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
-    If _SQL_Execute(-1,"INSERT INTO BBKS (ComputerName,Status,Error) VALUES ('1"& @computername & "','On;li''ne','None');") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
-    If _SQL_Execute(-1,"INSERT INTO BBKS (ComputerName,Status,Error) VALUES ('2"& @computername & "','Online','None');") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
-
-; это приведет к ошибке, потому что поле "ComputerName" не является уникальным!
-    If _SQL_Execute(-1,"INSERT INTO BBKS (ComputerName,Status,Error) VALUES ('2"& @computername & "','Online','None');") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error","Example Error this was meant to happen!" & @crlf & @crlf & _SQL_GETErrMsg())
+Func Connect($oADODB, $aServerInfo, $iTimeout = 15)
+    ; Connect to first available server for a connections pool
+    If Not IsObj($oADODB) Then Return SetError(1, 0, Null)
+    If Not IsArray($aServerInfo) Then Return SetError(2, 0, Null)
+    _SQL_ConnectionTimeout($oADODB, $iTimeout)
+    For $Index = 0 To UBound($aServerInfo) - 1
+        If _SQL_Connect($oADODB, $aServerInfo[$Index][0], $aServerInfo[$Index][1], $aServerInfo[$Index][2], $aServerInfo[$Index][3]) = $SQL_OK Then
+            ; If we successfully connect to a server
+            Return SetError(0, $Index, $SQL_OK)
+        EndIf
+    Next
+    ; If we couldn't connect to any server
+    Return SetError(0, 0, $SQL_ERROR)
+EndFunc
