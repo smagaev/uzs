@@ -34,9 +34,9 @@ Else
 ;~ 	Declare @serNoSZDevice int
 
 
-    $serNoSZDevice =  55536;
+    $serNoSZDevice =  11111;
 
-	const $ZDeviceName = "Terminal - "  & $serNoSZDevice
+	const $SZDeviceName = "Terminal - "  & $serNoSZDevice
 	const $name = 'Управление - '  & $serNoSZDevice
     const $ip = 1 & StringRight($serNoSZDevice,2)
     const $phone = $ip
@@ -44,10 +44,62 @@ Else
 	const $serNo = -1062731520 + Int($ip)
 	const $PortNo = $serNo
 	const $DeviceName = 'COM' & $serNo & ' - HSCOM TCP XPORT'
-	;const $DeviceName = "83945322"
-MsgBox(0, "HI", $DeviceName)
-If _SQL_Execute(-1,"insert GSO.dbo.Device(SubsystemID, ComputerID, Status, AsoTypeConnect, AsoConnID, DeviceName, DeviceComm, SerNo, PortNo, OrderOnPort, ChannelsCount) values(2,0,1,NULL,NULL,"&$DeviceName&",'',NULL,"&$PortNo&",0,0);") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
-	;set @DeviceID = @@IDENTITY
+
+	; --1. Created device
+    If _SQL_Execute(-1,"insert GSO.dbo.Device(SubsystemID, ComputerID, Status, AsoTypeConnect, AsoConnID, DeviceName, DeviceComm, SerNo, PortNo, OrderOnPort, ChannelsCount) values(2,0,1,NULL,NULL,'"&$DeviceName&"','',NULL,"&$PortNo&",0,0);") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+    $hData = _SQL_Execute(-1,"select max(DeviceID) from GSO.dbo.Device")
+    Local $vString2
+
+	if _SQL_FetchData( $hData, $vString2) = $SQL_OK then
+	  Msgbox(0,"DeviceID", "Created device: " & $vString2 [0])
+	Else
+	  Msgbox(0 + 16 +262144,"SQL Error",_SQL_GetErrMsg() )
+    EndIf
+	const $DeviceID = $vString2 [0]
+
+	;	-- 2. Create Channel --
+	$query ="insert GSO.dbo.SZSChannelBoard(DeviceID, Status, Name, DevType, DevVer, SerNo, PortNo, OrderOnPort, ChannelsCount) values(" & $DeviceID & ",1,'"& $name& "',45584,2," &$serNo& "," &$PortNo& ",0,1)"
+    If _SQL_Execute(-1,$query) = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+
+	$hData = _SQL_Execute(-1,"select max(ChannelBoardID) from GSO.dbo.SZSChannelBoard")
+    Local $vString2
+    if _SQL_FetchData( $hData, $vString2) = $SQL_OK then
+	  Msgbox(0,"ChanBoardDevID", "ChanBoardDevID: " & $vString2 [0])
+	Else
+	  Msgbox(0 + 16 +262144,"SQL Error",_SQL_GetErrMsg() )
+    EndIf
+	const $ChanBoardDevID = $vString2 [0]
+
+    ;-- 3. Create line --
+
+	$query = "INSERT INTO GSO.dbo.Line (SubsystemID,LocationID,LocationStaffID,ChannelType,GlobalRestrictMask,UserRestrictMask,PropertyMask,LineName,Phone,Status,LineState,ExtParam)VALUES(2,NULL,NULL,5,0,0,0,'"  & $lineName &"',"&$phone&",1,NULL,NULL)"
+    ;MsgBox(1, "line", $query)
+    If _SQL_Execute(-1,$query) = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+
+
+	;-- 4. Line binding --
+
+	$query = "INSERT INTO GSO.dbo.LinesBinding(LineID,ChanBoardDevID,ChanBoardID,DeviceID,ChannelNumber,RdmDeviceID) VALUES((Select max(LineID)from GSO.dbo.line),"   &   $DeviceID  &  "," & $ChanBoardDevID &  ",NULL,NULL,NULL)"
+	;MsgBox(1, "line", $query)
+    If _SQL_Execute(-1,$query) = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+
+   	;-- 5. Terminal device --
+	$query = "INSERT INTO GSO.dbo.SZSDevice (SZSDevID,StaffID,DevName,Priority,Status,GlobalNum,[Level],ParentStaffID,ParentSZSDevID,OrderOnParent,Visiable,ActivationCode,GPS) VALUES(" & $serNoSZDevice & ", (select max(StaffID)FROM GSO.dbo.Staff), '" & $SZDeviceName & "' , 1, 1, 0, 0, 0, 0, 0, 1, '','')"
+    ;MsgBox(1, "line", $query)
+	If _SQL_Execute(-1,$query) = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+
+	;--6. Terminal device --
+	;--ConnParam -> linesBinding(lineID)
+	$query = "INSERT INTO GSO.dbo.SZSShedule(SZSDevID,DevStaffID,DevClassID,BaseType,GlobalType,UserType,ConnParam,PriorType,CurrCall) VALUES("& $serNoSZDevice & ",(select max(StaffID)FROM GSO.dbo.Staff),22,5,0,0,(SELECT MAX([LineID])FROM [GSO].[dbo].[LinesBinding]),1,0)"
+    ;MsgBox(1, "line", $query)
+	If _SQL_Execute(-1,$query) = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+
+	;--7. --
+	$query = "INSERT INTO GSO.dbo.SZSSgsInfo(SZSDevID,StaffID,ZoneCount)VALUES(" & $serNoSZDevice & ",(select max(StaffID)FROM GSO.dbo.Staff),1)"
+	MsgBox(1, "line", $query)
+	If _SQL_Execute(-1,$query) = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+
+
 
 _SQL_Close($oADODB)
 _SQL_UnRegisterErrorHandler()
