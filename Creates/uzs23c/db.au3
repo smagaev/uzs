@@ -202,10 +202,10 @@ Func CreateUZS($serNoSZDevice, $typeOfUZS, $typeOfTerminalUZS )
 			RegWrite("HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\SensorM\GSO\Ports", "TCP192.168.1." & $ip,"REG_DWORD", "0x0001b210")
 		 case "UZS2/3c"
 			RegWrite("HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\SensorM\GSO\Ports", "TCP192.168.1." & $ip,"REG_DWORD", "0x0002b210")
-	  EndSwitch
+		 EndSwitch
 
-	  RegWrite("HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\SensorM\GSO\Ports\Params", "TCP192.168.1." & $ip,"REG_BINARY","00000000" & $ipH &"01a8c011270000000000000000")
 
+	  RegWrite("HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\SensorM\GSO\Ports\Params", "TCP192.168.1." & $ip,"REG_BINARY", "0x00000000" & $ipH &"01a8c011270000000000000000")
 
 	  MsgBox(1, "Info:", "UZS SerNo: " & $serNoSZDevice & " created!", 1)
 EndFunc
