@@ -66,7 +66,7 @@ Func CreateUZS($serNoSZDevice, $typeOfUZS, $typeOfTerminalUZS )
 	  ; Create an array to store connection credentials (2 servers in my case)
 	  ; This array can be obtained from an ini file like in your case
 	  ; [Server, Database, Username, Password]
-	  Local $aServerInfo[1][4] = [['localhost', 'GSO', 'sa', 'l0017']]
+	  Local $aServerInfo[1][4] = [['localhost', 'GSO', 'sa', 'Sensor_M']]
 
 	  $Connect = Connect($oADODB, $aServerInfo, 2)
 	  If @error Or ($Connect = $SQL_ERROR) Then
