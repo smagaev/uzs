@@ -54,6 +54,10 @@ CreateUZS($serNoSZDevice, $typOfUZS, $typeOfTerminalUZS)
       $i= $i +1
 wend
 
+#include <Process.au3>
+$StopService = _RunDos("net stop SCSChLService")
+if $StopService == 1 Then _RunDos("net start SCSChLService")
+
 Func CreateUZS($serNoSZDevice, $typeOfUZS, $typeOfTerminalUZS )
 	  _SQL_RegisterErrorHandler()
 	  ; Create ADODB.Connection object
@@ -208,6 +212,8 @@ Func CreateUZS($serNoSZDevice, $typeOfUZS, $typeOfTerminalUZS )
 	  RegWrite("HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\SensorM\GSO\Ports\Params", "TCP192.168.1." & $ip,"REG_BINARY", "0x00000000" & $ipH &"01a8c011270000000000000000")
 
 	  MsgBox(1, "Info:", "UZS SerNo: " & $serNoSZDevice & " created!", 1)
+
+
 EndFunc
 
 Func Connect($oADODB, $aServerInfo, $iTimeout = 15)
