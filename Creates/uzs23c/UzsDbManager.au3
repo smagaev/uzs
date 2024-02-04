@@ -172,9 +172,36 @@ Func CreateUZS($serNoSZDevice, $typeOfUZS, $typeOfTerminalUZS )
 		  If _SQL_Execute(-1,$query) = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
 
 		  ;-- 5. Terminal device --
-		  $query = "INSERT INTO GSO.dbo.SZSDevice (SZSDevID,StaffID,DevName,Priority,Status,GlobalNum,[Level],ParentStaffID,ParentSZSDevID,OrderOnParent,Visiable,ActivationCode,GPS) VALUES(" & $serNoSZDevice & ", (select max(StaffID)FROM GSO.dbo.Staff), '" & $SZDeviceName & "' , 1, 1, 0, 0, 0, 0, 0, 1, '','')"
+
+		   $query = "INSERT INTO GSO.dbo.SZSDevice (SZSDevID,StaffID,DevName,Priority,Status,GlobalNum,[Level],ParentStaffID,ParentSZSDevID,OrderOnParent,Visiable,ActivationCode,GPS) VALUES(" & $serNoSZDevice & ", (select max(StaffID)FROM GSO.dbo.Staff), '" & $SZDeviceName & "' , 1, 1, 0, 0, 0, 0, 0, 1, '','')"
 		  ;MsgBox(1, "line", $query)
 		  If _SQL_Execute(-1,$query) = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+
+		 ;create 15 channels for device
+		 Local $k = 0
+		 Local $j = 14
+		 While $k < 15
+
+			    $hData = _SQL_Execute(-1,"select MIN(SZSDevID)FROM GSO.dbo.SZSDevice")
+				Local $_SZSDevID
+				if _SQL_FetchData( $hData, $_SZSDevID) = $SQL_OK then
+				   $_SZSDevID = $_SZSDevID[0] - 1
+				    ;Msgbox(0,"_SZSDevID", "_SZSDevID: " & $_SZSDevID)
+				Else
+				  Msgbox(0 + 16 +262144,"SQL Error",_SQL_GetErrMsg() )
+				EndIf
+
+			 $query = "INSERT INTO GSO.dbo.SZSDevice (SZSDevID,StaffID,DevName,Priority,Status,GlobalNum,[Level],ParentStaffID,ParentSZSDevID,OrderOnParent,Visiable,ActivationCode,BuffSndOff,GPS) VALUES( "& $_SZSDevID & " , (select max(StaffID)FROM GSO.dbo.Staff), '' , 0, 1, 0, 1,(select max(StaffID)FROM GSO.dbo.Staff),  " & $serNoSZDevice & ", "& $j &",  0, null,0,Null)"
+			 ;consolewrite($query)
+
+
+			 If _SQL_Execute(-1,$query) = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+			 $k = $k + 1
+			 $j = $j - 1
+		  WEnd
+
+
+
 
 		  ;--6. Terminal device --
 		  ;--ConnParam -> linesBinding(lineID)
@@ -186,13 +213,16 @@ Func CreateUZS($serNoSZDevice, $typeOfUZS, $typeOfTerminalUZS )
 		  $query = "INSERT INTO GSO.dbo.SZSShedule(SZSDevID,DevStaffID,DevClassID,BaseType,GlobalType,UserType,ConnParam,PriorType,CurrCall) VALUES("& $serNoSZDevice & ",(select max(StaffID)FROM GSO.dbo.Staff),20,5,0,0,(SELECT MAX([LineID])FROM [GSO].[dbo].[LinesBinding]),1,0)"
 			 case "UZS3"
 	 	  $query = "INSERT INTO GSO.dbo.SZSShedule(SZSDevID,DevStaffID,DevClassID,BaseType,GlobalType,UserType,ConnParam,PriorType,CurrCall) VALUES("& $serNoSZDevice & ",(select max(StaffID)FROM GSO.dbo.Staff),22,5,0,0,(SELECT MAX([LineID])FROM [GSO].[dbo].[LinesBinding]),1,0)"
-          EndSwitch
+		 EndSwitch
+
+
 		  ;MsgBox(1, "line", $query)
 		  If _SQL_Execute(-1,$query) = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
 
 
 		  ;--7. --
-		  $query = "INSERT INTO GSO.dbo.SZSSgsInfo(SZSDevID,StaffID,ZoneCount)VALUES(" & $serNoSZDevice & ",(select max(StaffID)FROM GSO.dbo.Staff),1)"
+		  ;ZonCount - count of zones terminal device
+		  $query = "INSERT INTO GSO.dbo.SZSSgsInfo(SZSDevID,StaffID,ZoneCount)VALUES(" & $serNoSZDevice & ",(select max(StaffID)FROM GSO.dbo.Staff),15)"
 		  ;MsgBox(1, "line", $query)
 		  If _SQL_Execute(-1,$query) = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
 
