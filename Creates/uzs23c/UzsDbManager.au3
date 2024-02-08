@@ -123,9 +123,8 @@ Func CreateUZS($serNoSZDevice, $typeOfUZS, $typeOfTerminalUZS )
 		 case "UZS1"
 		  If _SQL_Execute(-1,"insert GSO.dbo.Device(SubsystemID, ComputerID, Status, AsoTypeConnect, AsoConnID, DeviceName, DeviceComm, SerNo, PortNo, OrderOnPort, ChannelsCount) values(2,0,1,NULL,NULL,'"&$DeviceName&"','',NULL,"&$PortNo&",0,0);") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
 		  case "UZS2/3"
-			 MsgBox(1, "Info", "This type of UZS has not realized yet",4)
-			 exit
-		 case "UZS2/3c"
+		  If _SQL_Execute(-1,"insert GSO.dbo.Device(SubsystemID, ComputerID, Status, AsoTypeConnect, AsoConnID, DeviceName, DeviceComm, SerNo, PortNo, OrderOnPort, ChannelsCount) values(2,0,1,NULL,NULL,'"&$DeviceName&"','',NULL,"&$PortNo&",0,0);") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
+		  case "UZS2/3c"
 		  If _SQL_Execute(-1,"insert GSO.dbo.Device(SubsystemID, ComputerID, Status, AsoTypeConnect, AsoConnID, DeviceName, DeviceComm, SerNo, PortNo, OrderOnPort, ChannelsCount) values(2,0,1,NULL,NULL,'"&$DeviceName&"','',NULL,"&$PortNo&",0,0);") = $SQL_ERROR then Msgbox(0 + 16 +262144,"Error",_SQL_GetErrMsg())
       EndSwitch
 
@@ -143,8 +142,10 @@ Func CreateUZS($serNoSZDevice, $typeOfUZS, $typeOfTerminalUZS )
 		  ;DevType UZS1 => 1
 		  ;DevType UZS2/3c => 2
 	  Switch $typeOfUZS
-		 case "UZS1"
+		  case "UZS1"
 			 $query ="insert GSO.dbo.SZSChannelBoard(DeviceID, Status, Name, DevType, DevVer, SerNo, PortNo, OrderOnPort, ChannelsCount) values(" & $DeviceID & ",1,'"& $name& "',45584,1," &$serNo& "," &$PortNo& ",0,1)"
+		  case "UZS2/3"
+			 $query ="insert GSO.dbo.SZSChannelBoard(DeviceID, Status, Name, DevType, DevVer, SerNo, PortNo, OrderOnPort, ChannelsCount) values(" & $DeviceID & ",1,'"& $name& "',45584,0," &$serNo& "," &$PortNo& ",0,1)"
 		  case "UZS2/3c"
 			 $query ="insert GSO.dbo.SZSChannelBoard(DeviceID, Status, Name, DevType, DevVer, SerNo, PortNo, OrderOnPort, ChannelsCount) values(" & $DeviceID & ",1,'"& $name& "',45584,2," &$serNo& "," &$PortNo& ",0,1)"
 	  EndSwitch
